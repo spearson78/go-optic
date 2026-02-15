@@ -1,0 +1,15 @@
+{{ $toRead := .Get "file" }}
+{{ $id := .Get "id" }}
+{{ $fileContents := readFile $toRead | safeHTML }}
+
+{{ $blockRe := print `(?s)//BEGIN ` $id `\n*(.*?)\n*(\s*)//END ` $id }}
+{{ $match := findRESubmatch $blockRe $fileContents 1 }}
+{{ $block := index $match 0 }}
+{{ $code := index $block 1 }}
+{{ highlight $code "go" "lineNos=true"}}
+
+
+
+
+
+

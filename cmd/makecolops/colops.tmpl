@@ -1,0 +1,245 @@
+
+//build !makecolops
+
+package {{.PackageName}}
+
+//***************************************
+//THIS FILE IS AUTO GENERATED DO NOT EDIT
+//***************************************
+
+import ({{if .ImportOptics}}
+	. "github.com/spearson78/go-optic"
+{{end}}{{range .AdditionalImports}}
+	"{{.}}"
+	{{end}}
+
+	"github.com/samber/lo"
+	"github.com/samber/mo"
+)
+
+// The {{.CollectionName}}Col function converts a {{.CollectionName}} to a [Collection].
+func {{.CollectionName}}Col{{.AsList .TypeParameters}}({{.AsListPrefix .Parameters}}source {{.CollectionType}}) Collection[{{.IndexType}}, {{.FocusType}}, Pure] {
+	return MustGet(ColTypeToCol({{.CollectionConstructor}}), source)
+}
+
+// Traverse{{.CollectionName}}Col returns a [Traversal] over the [Collection] representation of a {{.CollectionName}}.
+func Traverse{{.CollectionName}}Col{{.AsList .TypeParameters}}({{.AsListPrefix .Parameters}}) Optic[{{.IndexType}}, Collection[{{.IndexType}}, {{.FocusType}}, Pure], Collection[{{.IndexType}}, {{.FocusType}}, Pure], {{.FocusType}}, {{.FocusType}}, ReturnMany, ReadWrite, UniDir, Pure] {
+	return TraverseColIEP[{{.IndexType}}, {{.FocusType}}, {{.FocusType}}, Pure](TraverseColType({{.CollectionConstructor}}).AsIxMatch())
+}
+
+{{if not $.NoColOf}}
+// The {{.CollectionName}}Of combinator focuses on a {{.CollectionName}} of all the elements in the given optic.
+//
+// Under modification this collection can be modified and will be rebuilt into the original data structure.
+// If the modified {{.CollectionName}} contains fewer elements the result will use values from the original source.
+// If the modified {{.CollectionName}} contains more elements they will be ignored.
+//
+// See:
+//   - {{.CollectionName}}OfP for a polymorphic version
+func {{.CollectionName}}Of[{{.AsListPrefix .TypeParameters}}OS, OT, RET, RW, DIR, ERR any]({{.AsListPrefix .Parameters}}o Optic[{{.IndexType}}, OS, OT, {{.FocusType}}, {{.FocusType}}, RET, RW, DIR, ERR]) Optic[Void, OS, OT, {{.CollectionType}}, {{.CollectionType}}, ReturnOne, RW, UniDir, ERR] {
+	return ColTypeOf(CombiColTypeErr[ERR]({{.CollectionConstructor}}), o)
+}
+
+// The {{.CollectionName}}OfP polymorphic combinator focuses on a {{.CollectionName}} of all the elements in the given optic.
+//
+// Under modification this collection can be modified and will be rebuilt into the original data structure.
+// If the modified {{.CollectionName}} contains fewer elements then [ErrUnsafeMissingElement] will be returned
+// If the modified {{.CollectionName}} contains more elements they will be ignored.
+//
+// See:
+//   - {{.CollectionName}}Of for a non polymorphic version
+func {{.CollectionName}}OfP[{{.AsListPrefix .TypeParametersP}}OS, OT, RET, RW, DIR, ERR any]({{.AsListPrefix .Parameters}}o Optic[{{.IndexType}}, OS, OT, {{.FocusType}}, {{.FocusTypeP}}, RET, RW, DIR, ERR]) Optic[Void, OS, OT, {{.CollectionType}}, {{.CollectionTypeP}}, ReturnOne, RW, UniDir, Err] {
+	return ColTypeOfP(CombiColTypeErr[ERR]({{.CollectionConstructorP}}), o)
+}
+{{end}}
+
+{{if eq .EqPredicate ""}}
+// Eq{{.CollectionName}}T2 returns a [Predicate] that is satisfied if the elements of the focused {{.CollectionName}} are all equal to (==) the elements of the provided constant {{.CollectionName}} and element [Predicate].
+func Eq{{.CollectionName}}[{{.AsListPrefix .TypeParameters}}PERR TPure]({{.AsListPrefix .Parameters}}right {{.CollectionType}}, eq Predicate[lo.Tuple2[{{.FocusType}}, {{.FocusType}}], PERR]) Optic[Void, {{.CollectionType}}, {{.CollectionType}}, bool, bool, ReturnOne, ReadOnly, UniDir, Pure] {
+	{{if .TypeParameters}}
+	return OpT2Bind(Eq{{.CollectionName}}T2[{{.TypeParameterNames}}]({{.AsListPrefix .ParameterNames}}eq), right)
+	{{else}}
+	return OpT2Bind(Eq{{.CollectionName}}T2({{.AsListPrefix .ParameterNames}}eq), right)
+	{{end}}
+}
+
+// Eq{{.CollectionName}}T2 returns a [BinaryOp] that is satisfied if every element and index in {{.CollectionName}} A and {{.CollectionName}} B in focused order are equal.
+//
+// See:
+//   - [Eq{{.CollectionName}}] for a unary version.
+func Eq{{.CollectionName}}T2[{{.AsListPrefix .TypeParameters}}PERR TPure]({{.AsListPrefix .Parameters}}eq Predicate[lo.Tuple2[{{.FocusType}}, {{.FocusType}}], PERR]) Optic[Void, lo.Tuple2[{{.CollectionType}}, {{.CollectionType}}], lo.Tuple2[{{.CollectionType}}, {{.CollectionType}}], bool, bool, ReturnOne, ReadOnly, UniDir, Pure] {
+	return Ret1(Ro(EPure(Compose(
+		DelveT2(ColTypeToCol({{.CollectionConstructor}})),		
+		EqColT2[{{.IndexType}}, {{.FocusType}}, Pure](
+			eq,
+		),
+	))))
+}
+{{else}}
+// Eq{{.CollectionName}} returns a [Predicate] that is satisfied if the elements of the focused {{.CollectionName}} are all equal to (==) the elements of the provided constant {{.CollectionName}} and element [Predicate].
+func Eq{{.CollectionName}}{{.AsList .TypeParameters}}({{.AsListPrefix .Parameters}}right {{.CollectionType}}) Optic[Void, {{.CollectionType}}, {{.CollectionType}}, bool, bool, ReturnOne, ReadOnly, UniDir, Pure] {
+	{{if .TypeParameters}}
+	return OpT2Bind(Eq{{.CollectionName}}T2[{{.TypeParameterNames}}]({{.AsListPrefix .ParameterNames}}), right)
+	{{else}}
+	return OpT2Bind(Eq{{.CollectionName}}T2({{.AsListPrefix .ParameterNames}}),right)
+	{{end}}
+}
+
+// Eq{{.CollectionName}}T2 returns an [BinaryOp] that is satisfied if every element and index in {{.CollectionName}} A and {{.CollectionName}} B in focused order are equal.
+//
+// See:
+//   - [Eq{{.CollectionName}}] for a unary version.
+func Eq{{.CollectionName}}T2{{.AsList .TypeParameters}}({{.AsListPrefix .Parameters}}) Optic[Void, lo.Tuple2[{{.CollectionType}}, {{.CollectionType}}], lo.Tuple2[{{.CollectionType}}, {{.CollectionType}}], bool, bool, ReturnOne, ReadOnly, UniDir, Pure] {
+	return Ret1(Ro(EPure(Compose(
+		DelveT2(ColTypeToCol({{.CollectionConstructor}})),		
+		EqColT2[{{.IndexType}}, {{.FocusType}}, Pure](
+			{{.EqPredicate}},
+		),
+	))))
+}
+{{end}}
+
+// The {{.CollectionName}}Op combinator applies the given collection operation to a {{.CollectionName}} and focuses the modified {{.CollectionName}}.
+//
+// See:
+//   - [{{.CollectionName}}TraverseOp] for a combinator that efficiently traverses the elements of the modified {{.CollectionName}}.
+//   - [{{.CollectionName}}ColOp] for a combinator that focuses the modified [Collection].
+func {{.CollectionName}}Op[{{.AsListPrefix .TypeParametersP}}I any, RET TReturnOne, RW any, DIR, ERR any]({{.AsListPrefix .Parameters}}o Optic[I, Collection[{{.IndexType}}, {{.FocusType}}, ERR], Collection[{{.IndexType}}, {{.FocusTypeP}}, ERR], Collection[{{.IndexType}}, {{.FocusTypeP}}, ERR], Collection[{{.IndexType}}, {{.FocusTypeP}}, ERR], RET, RW, DIR, ERR]) Optic[I, {{.CollectionType}}, {{.CollectionTypeP}}, {{.CollectionTypeP}}, {{.CollectionTypeP}}, ReturnOne, RW, DIR, ERR] {
+	return ColTypeOp(CombiColTypeErr[ERR]({{.CollectionConstructorP}}), o)
+}
+
+// ColTo{{.CollectionName}} returns an [Iso] that converts from a {{.CollectionName}} like collection to a {{.CollectionName}}
+//
+// See:
+//  - ColTo{{.CollectionName}}P for a polymorphic version.
+func ColTo{{.CollectionName}}{{.AsList .TypeParameters}}({{.AsListPrefix .Parameters}}) Optic[Void, Collection[{{.IndexType}}, {{.FocusType}}, Pure], Collection[{{.IndexType}}, {{.FocusType}}, Pure], {{.CollectionType}}, {{.CollectionType}}, ReturnOne, ReadWrite, BiDir, Pure] {
+	return ColToColType({{.CollectionConstructor}})
+}
+
+// ColTo{{.CollectionName}}P returns a polymorphic [Iso] that converts from a {{.CollectionName}} like collection to a {{.CollectionName}}
+//
+// See:
+//  - ColTo{{.CollectionName}} for a no polymorphic version.
+func ColTo{{.CollectionName}}P{{.AsList .TypeParametersP}}({{.AsListPrefix .Parameters}}) Optic[Void, Collection[{{.IndexType}}, {{.FocusType}}, Pure], Collection[{{.IndexType}}, {{.FocusTypeP}}, Pure], {{.CollectionType}}, {{.CollectionTypeP}}, ReturnOne, ReadWrite, BiDir, Pure] {
+	return ColToColType({{.CollectionConstructorP}})
+}
+
+// Diff{{.CollectionName}} returns a [Traversal] that focuses on the differences between the given and focused {{.CollectionName}}s.
+// The distance [Operation] is used to determine if an element has either changed position or been modified.
+// Elements are considered same if they have the smallest distance compared to all other elements and the distance is lower than the threshold.
+//
+// Details of the diff are encoded in the index of the focused elements.
+//
+// See:
+//   - [Diff{{.CollectionName}}I] for an index aware version
+//   - [Diff{{.CollectionName}}T2I] for a version that compares 2 focused {{.CollectionName}}s.
+//   - [Diff] for the index detailing the detected diff.
+//   - [Distance] for a convenience constructor for the distance operation.
+func Diff{{.CollectionName}}[{{.AsListPrefix .TypeParameters}}RET TReturnOne, ERR any]({{.AsListPrefix .Parameters}}col {{.CollectionType}},threshold float64, distance Operation[lo.Tuple2[{{.FocusType}}, {{.FocusType}}], float64, RET, ERR], filterDiff DiffType) Optic[Diff[{{.IndexType}}, {{.FocusType}}], {{$.CollectionType}}, {{$.CollectionType}}, mo.Option[{{.FocusType}}], mo.Option[{{.FocusType}}], ReturnMany, ReadWrite, UniDir, ERR] {
+	return DiffColType(CombiColTypeErr[ERR]({{.CollectionConstructor}}), col, threshold, distance, filterDiff)
+}
+
+// Diff{{.CollectionName}}T2 returns a [Traversal] that focuses on the differences between 2 {{.CollectionName}}s.
+// The distance [Operation] is used to determine if an element has either changed position or been modified.
+// Elements are considered same if they have the smallest distance compared to all other elements and the distance is lower than the threshold.
+//
+// Note: The source tuple should have the modified {{.CollectionName}} in the first position and the reference {{.CollectionName}} in the second position. This is compatible with [T2Dup] returning the modified tree.
+//
+// Details of the diff are encoded in the index of the focused elements.
+//
+// See:
+//   - [Diff{{.CollectionName}}T2I] for an index aware version
+//   - [Diff{{.CollectionName}}] for a a version that compares against a given {{.CollectionName}}
+//   - [Diff] for the index detailing the detected diff.
+//   - [Distance] for a convenience constructor for the distance operation.
+func Diff{{.CollectionName}}T2[{{.AsListPrefix .TypeParameters}}RET TReturnOne, ERR any]({{.AsListPrefix .Parameters}}threshold float64, distance Operation[lo.Tuple2[{{.FocusType}}, {{.FocusType}}], float64, RET, ERR], filterDiff DiffType) Optic[Diff[{{.IndexType}}, {{.FocusType}}], lo.Tuple2[{{$.CollectionType}}, {{$.CollectionType}}], lo.Tuple2[{{$.CollectionType}}, {{$.CollectionType}}], mo.Option[{{.FocusType}}], mo.Option[{{.FocusType}}], ReturnMany, ReadWrite, UniDir, ERR] {
+	return DiffColTypeT2(CombiColTypeErr[ERR]({{.CollectionConstructor}}), threshold, distance, filterDiff)
+}
+
+
+// Diff{{.CollectionName}}I returns a [Traversal] that focuses on the differences between a given and focused {{.CollectionName}}.
+// The distance [Operation] is used to determine if an element has either changed position or been modified.
+// Elements are considered same if they have the smallest distance compared to all other elements and the distance is lower than the threshold.
+//
+// Details of the diff are encoded in the index of the focused elements.
+//
+// See:
+//   - [Diff{{.CollectionName}}] for a non index aware version
+//   - [Diff{{.CollectionName}}T2] for a version that compares 2 focused {{.CollectionName}}s.
+//   - [Diff] for the index detailing the detected diff.
+//   - [Distance] for a convenience constructor for the distance operation.
+func Diff{{.CollectionName}}I[{{.AsListPrefix .TypeParameters}}RET TReturnOne, ERR any]({{.AsListPrefix .Parameters}}col {{.CollectionType}}, threshold float64, distance Operation[lo.Tuple2[ValueI[{{.IndexType}}, {{.FocusType}}], ValueI[{{.IndexType}}, {{.FocusType}}]], float64, RET, ERR], filterDiff DiffType) Optic[Diff[{{.IndexType}}, {{.FocusType}}], {{$.CollectionType}}, {{$.CollectionType}}, mo.Option[{{.FocusType}}], mo.Option[{{.FocusType}}], ReturnMany, ReadWrite, UniDir, ERR] {
+	return DiffColTypeI(CombiColTypeErr[ERR]({{.CollectionConstructor}}), col , threshold, distance, filterDiff)
+}
+
+// Diff{{.CollectionName}}T2I returns a [Traversal] that focuses on the differences between 2 {{.CollectionName}}s.
+// The distance [Operation] is used to determine if an element has either changed position or been modified.
+// Elements are considered same if they have the smallest distance compared to all other elements and the distance is lower than the threshold.
+//
+// Note: The source tuple should have the modified {{.CollectionName}} in the first position and the reference {{.CollectionName}} in the second position. This is compatible with [T2Dup] returning the modified tree.
+//
+// Details of the diff are encoded in the index of the focused elements.
+//
+// See:
+//   - [Diff{{.CollectionName}}T2] for a non index aware version
+//   - [Diff{{.CollectionName}}I] for a a version that compares against a given {{.CollectionName}}
+//   - [Diff] for the index detailing the detected diff.
+//   - [Distance] for a convenience constructor for the distance operation.
+func Diff{{.CollectionName}}T2I[{{.AsListPrefix .TypeParameters}}RET TReturnOne, ERR any]({{.AsListPrefix .Parameters}}threshold float64, distance Operation[lo.Tuple2[ValueI[{{.IndexType}}, {{.FocusType}}], ValueI[{{.IndexType}}, {{.FocusType}}]], float64, RET, ERR], filterDiff DiffType) Optic[Diff[{{.IndexType}}, {{.FocusType}}], lo.Tuple2[{{$.CollectionType}}, {{$.CollectionType}}], lo.Tuple2[{{$.CollectionType}}, {{$.CollectionType}}], mo.Option[{{.FocusType}}], mo.Option[{{.FocusType}}], ReturnMany, ReadWrite, UniDir, ERR] {
+	return DiffColTypeT2I(CombiColTypeErr[ERR]({{.CollectionConstructor}}), threshold, distance, filterDiff)
+}
+
+// Append{{.CollectionName}}T2 applies the [AppendColT2] operation to a {{$.CollectionName}}
+func Append{{.CollectionName}}T2[{{.AsListPrefix .TypeParameters}}I, ERR any]({{.AsListPrefix .Parameters}}) Optic[Void, lo.Tuple2[{{$.CollectionType}}, {{$.CollectionType}}], lo.Tuple2[{{$.CollectionType}}, {{$.CollectionType}}], {{$.CollectionType}}, {{$.CollectionType}}, ReturnOne, ReadOnly, UniDir, ERR] {
+	return AppendColTypeT2(CombiColTypeErr[ERR]({{.CollectionConstructor}}))
+}
+
+// Prepend{{.CollectionName}}T2 applies the [PrependColT2] operation to a {{$.CollectionName}}
+func Prepend{{.CollectionName}}T2[{{.AsListPrefix .TypeParameters}}I, ERR any]({{.AsListPrefix .Parameters}}) Optic[Void, lo.Tuple2[{{$.CollectionType}}, {{$.CollectionType}}], lo.Tuple2[{{$.CollectionType}}, {{$.CollectionType}}], {{$.CollectionType}}, {{$.CollectionType}}, ReturnOne, ReadOnly, UniDir, ERR] {
+	return PrependColTypeT2(CombiColTypeErr[ERR]({{.CollectionConstructor}}))
+}
+
+
+{{range .Operations}}
+// {{.BaseName}}{{$.CollectionName}} applies the [{{.DocName}}] operation to a {{$.CollectionName}}{{if .Indexed}}
+//
+// See:
+// - [{{.BaseName}}{{$.CollectionName}}I] for an index aware version{{end}}
+func {{.BaseName}}{{$.CollectionName}}{{$.AsCombinedListT $.TypeParameters .TypeParameters}}({{$.AsCombinedList $.Parameters .Parameters}}) Optic[Void,{{$.CollectionType}}, {{$.CollectionType}}, {{$.CollectionType}}, {{$.CollectionType}}, ReturnOne, {{.RW}}, {{.Dir}}, {{.Err}}] {
+	return {{$.CollectionName}}Op({{$.AsListPrefix $.ParameterNames}}{{.Constructor}})
+}
+
+{{if $.Poly}}
+// {{.BaseName}}{{$.CollectionName}}P applies the [{{.DocName}}] operation to a {{$.CollectionName}}{{if .Indexed}}
+//
+// See:
+// - [{{.BaseName}}{{$.CollectionName}}I] for an index aware version{{end}}
+func {{.BaseName}}{{$.CollectionName}}P{{$.AsCombinedListT $.TypeParametersP .TypeParameters}}({{$.AsCombinedList $.Parameters .Parameters}}) Optic[Void,{{$.CollectionType}}, {{$.CollectionTypeP}}, {{$.CollectionType}}, {{$.CollectionTypeP}}, ReturnOne, {{.RW}}, {{.Dir}}, {{.Err}}] {
+	return {{$.CollectionName}}Op({{$.AsListPrefix $.ParameterNames}}{{.ConstructorP}})
+}
+
+{{end}}
+
+{{if .Indexed}}
+// {{.BaseName}}{{$.CollectionName}}I applies the [{{.DocName}}I] operation to a {{$.CollectionName}}
+//
+// See:
+// - [{{.BaseName}}{{$.CollectionName}}] for a non index aware version
+func {{.BaseName}}{{$.CollectionName}}I{{$.AsCombinedListT $.TypeParameters .TypeParameters}}({{$.AsCombinedList $.Parameters .IxParameters}}) Optic[Void,{{$.CollectionType}}, {{$.CollectionType}}, {{$.CollectionType}}, {{$.CollectionType}}, ReturnOne, {{.RW}}, {{.Dir}}, {{.Err}}] {
+	return {{$.CollectionName}}Op({{$.AsListPrefix $.ParameterNames}}{{.IConstructor}})
+}
+
+{{if $.Poly}}
+// {{.BaseName}}{{$.CollectionName}}IP applies the [{{.DocName}}I] operation to a {{$.CollectionName}}
+//
+// See:
+// - [{{.BaseName}}{{$.CollectionName}}]P for a non index aware version
+func {{.BaseName}}{{$.CollectionName}}IP{{$.AsCombinedListT $.TypeParametersP .TypeParameters}}({{$.AsCombinedList $.Parameters .IxParameters}}) Optic[Void,{{$.CollectionType}}, {{$.CollectionTypeP}}, {{$.CollectionType}}, {{$.CollectionTypeP}}, ReturnOne, {{.RW}}, {{.Dir}}, {{.Err}}] {
+	return {{$.CollectionName}}Op({{$.AsListPrefix $.ParameterNames}}{{.IConstructorP}})
+}
+
+{{end}}
+			
+{{end}}
+
+{{end}}

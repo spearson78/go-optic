@@ -1,0 +1,196 @@
+
+package {{.PackageName}}
+
+import . "github.com/spearson78/go-optic"
+
+// The {{.Prefix}}{{.RestrictedName}} re-constrain converts an Optic with a complex but {{.RestrictedType}} {{.Desc}} type to {{.RestrictedType}}
+//
+// {{.TypeParamName}} T{{.RestrictedType}} --> {{.RestrictedType}}
+//
+// See:
+//   - {{.Prefix}}{{.RestrictedName}} for a re-constrain to {{.RestrictedType}}
+//   - {{.Prefix}}{{.AnyName}} for a re-constrain to {{.AnyType}}
+//   - {{.Prefix}}L for a re-constrain to the left side of a CompositionTree
+//   - {{.Prefix}}R for a re-constrain to the Right side of a CompositionTree
+//   - {{.Prefix}}Swap for a re-constrain that swaps the components of a CompositionTree
+//   - {{.Prefix}}Swap for a re-constrain that swaps the components of a CompositionTree
+//   - {{.Prefix}}SwapL for a re-constrain that swaps the left components of a nested CompositionTree
+//   - {{.Prefix}}Merge for a re-constrain that merges identical components of a CompositionTree
+//   - {{.Prefix}}MergeL for a re-constrain that merges the identical left components of a nested CompositionTree
+//   - {{.Prefix}}Trans for a re-constrain that swaps the middle elements of a nested CompositionTree.
+//   - {{.Prefix}}TransL for a re-constrain that swaps the right components into the left nested CompositionTree
+func {{.Prefix}}{{.RestrictedName}}[I, S, T, A, B any, RET {{.InRestrictedRET}}, RW {{.InRestrictedRW}}, DIR {{.InRestrictedDIR}}, ERR {{.InRestrictedERR}}](o Optic[I, S, T, A, B, RET, RW, DIR, ERR]) Optic[I, S, T, A, B, {{.ReconstrainRestricted}}] {
+	return UnsafeReconstrain[{{.ReconstrainRestricted}}](o)
+}
+
+// The {{.Prefix}}{{.AnyName}} re-constrain converts an Optic with any {{.Desc}} type to {{.AnyType}}
+//
+// {{.TypeParamName}} any --> {{.AnyType}}
+//
+// See:
+//   - {{.Prefix}}{{.RestrictedName}} for a re-constrain to {{.RestrictedType}}
+//   - {{.Prefix}}{{.AnyName}} for a re-constrain to {{.AnyType}}
+//   - {{.Prefix}}L for a re-constrain to the left side of a CompositionTree
+//   - {{.Prefix}}R for a re-constrain to the Right side of a CompositionTree
+//   - {{.Prefix}}Swap for a re-constrain that swaps the components of a CompositionTree
+//   - {{.Prefix}}SwapL for a re-constrain that swaps the left components of a nested CompositionTree
+//   - {{.Prefix}}Merge for a re-constrain that merges identical components of a CompositionTree
+//   - {{.Prefix}}MergeL for a re-constrain that merges the identical left components of a nested CompositionTree
+//   - {{.Prefix}}Trans for a re-constrain that swaps the middle elements of a nested CompositionTree.
+//   - {{.Prefix}}TransL for a re-constrain that swaps the right components into the left nested CompositionTree
+func {{.Prefix}}{{.AnyName}}[I, S, T, A, B any, RET any, RW any, DIR any, ERR any](o Optic[I, S, T, A, B, RET, RW, DIR, ERR]) Optic[I, S, T, A, B, {{.ReconstrainAny}}] {
+	return UnsafeReconstrain[{{.ReconstrainAny}}](o)
+}
+
+// The {{.Prefix}}L re-constrain converts an Optic's {{.Desc}} type to the left side of the [CompositionTree] where the right side is {{.RestrictedType}}.
+//
+// CompositionTree[{{.TypeParamName}}L any, {{.TypeParamName}}R T{{.RestrictedType}}] --> {{.TypeParamName}}L
+//
+// See:
+//   - {{.Prefix}}{{.RestrictedName}} for a re-constrain to {{.RestrictedType}}
+//   - {{.Prefix}}{{.AnyName}} for a re-constrain to {{.AnyType}}
+//   - {{.Prefix}}L for a re-constrain to the left side of a CompositionTree
+//   - {{.Prefix}}R for a re-constrain to the Right side of a CompositionTree
+//   - {{.Prefix}}Swap for a re-constrain that swaps the components of a CompositionTree
+//   - {{.Prefix}}SwapL for a re-constrain that swaps the left components of a nested CompositionTree
+//   - {{.Prefix}}Merge for a re-constrain that merges identical components of a CompositionTree
+//   - {{.Prefix}}MergeL for a re-constrain that merges the identical left components of a nested CompositionTree
+//   - {{.Prefix}}Trans for a re-constrain that swaps the middle elements of a nested CompositionTree.
+//   - {{.Prefix}}TransL for a re-constrain that swaps the right components into the left nested CompositionTree
+func {{.Prefix}}L[I, S, T, A, B any, {{.InConstraintsPrefixL}}](o Optic[I, S, T, A, B, {{.InOpticPrefixL}}]) Optic[I, S, T, A, B, {{.ReconstrainPrefixL}}] {
+	return UnsafeReconstrain[{{.ReconstrainPrefixL}}](o)
+}
+
+// The {{.Prefix}}R re-constrain converts an Optic's {{.Desc}} type to the right side of the [CompositionTree] where the left side is {{.RestrictedType}}.
+//
+// CompositionTree[{{.TypeParamName}}L any, {{.TypeParamName}}R T{{.RestrictedType}}] --> {{.TypeParamName}}R
+//
+// See:
+//   - {{.Prefix}}{{.RestrictedName}} for a re-constrain to {{.RestrictedType}}
+//   - {{.Prefix}}{{.AnyName}} for a re-constrain to {{.AnyType}}
+//   - {{.Prefix}}L for a re-constrain to the left side of a CompositionTree
+//   - {{.Prefix}}R for a re-constrain to the Right side of a CompositionTree
+//   - {{.Prefix}}Swap for a re-constrain that swaps the components of a CompositionTree
+//   - {{.Prefix}}SwapL for a re-constrain that swaps the left components of a nested CompositionTree
+//   - {{.Prefix}}Merge for a re-constrain that merges identical components of a CompositionTree
+//   - {{.Prefix}}MergeL for a re-constrain that merges the identical left components of a nested CompositionTree
+//   - {{.Prefix}}Trans for a re-constrain that swaps the middle elements of a nested CompositionTree.
+//   - {{.Prefix}}TransL for a re-constrain that swaps the right components into the left nested CompositionTree
+func {{.Prefix}}R[I, S, T, A, B any, {{.InConstraintsPrefixR}}](o Optic[I, S, T, A, B, {{.InOpticPrefixL}}]) Optic[I, S, T, A, B, {{.ReconstrainPrefixR}}] {
+	return UnsafeReconstrain[{{.ReconstrainPrefixR}}](o)
+}
+
+// The {{.Prefix}}Swap re-constrain swaps the left and right side of an Optic's {{.Desc}} type [CompositionTree].
+//
+// CompositionTree[{{.TypeParamName}}L, {{.TypeParamName}}R] --> CompositionTree[{{.TypeParamName}}R, {{.TypeParamName}}L]
+//
+// See:
+//   - {{.Prefix}}{{.RestrictedName}} for a re-constrain to {{.RestrictedType}}
+//   - {{.Prefix}}{{.AnyName}} for a re-constrain to {{.AnyType}}
+//   - {{.Prefix}}L for a re-constrain to the left side of a CompositionTree
+//   - {{.Prefix}}R for a re-constrain to the Right side of a CompositionTree
+//   - {{.Prefix}}Swap for a re-constrain that swaps the components of a CompositionTree
+//   - {{.Prefix}}SwapL for a re-constrain that swaps the left components of a nested CompositionTree
+//   - {{.Prefix}}Merge for a re-constrain that merges identical components of a CompositionTree
+//   - {{.Prefix}}MergeL for a re-constrain that merges the identical left components of a nested CompositionTree
+//   - {{.Prefix}}Trans for a re-constrain that swaps the middle elements of a nested CompositionTree.
+//   - {{.Prefix}}TransL for a re-constrain that swaps the right components into the left nested CompositionTree
+func {{.Prefix}}Swap[I, S, T, A, B any, {{.InConstraintsPrefixSwapL}}](o Optic[I, S, T, A, B, {{.InOpticPrefixL}}]) Optic[I, S, T, A, B, {{.ReconstrainPrefixSwap}}] {
+	return UnsafeReconstrain[{{.ReconstrainPrefixSwap}}](o)
+}
+
+// The {{.Prefix}}SwapL re-constrain swaps the left and right side of the left side of a nested [CompositionTree].
+//
+// CompositionTree[CompositionTree[{{.TypeParamName}}1, {{.TypeParamName}}2], {{.TypeParamName}}3] --> CompositionTree[CompositionTree[{{.TypeParamName}}2, {{.TypeParamName}}1], {{.TypeParamName}}3]
+//
+// See:
+//   - {{.Prefix}}{{.RestrictedName}} for a re-constrain to {{.RestrictedType}}
+//   - {{.Prefix}}{{.AnyName}} for a re-constrain to {{.AnyType}}
+//   - {{.Prefix}}L for a re-constrain to the left side of a CompositionTree
+//   - {{.Prefix}}R for a re-constrain to the Right side of a CompositionTree
+//   - {{.Prefix}}Swap for a re-constrain that swaps the components of a CompositionTree
+//   - {{.Prefix}}SwapL for a re-constrain that swaps the left components of a nested CompositionTree
+//   - {{.Prefix}}Merge for a re-constrain that merges identical components of a CompositionTree
+//   - {{.Prefix}}MergeL for a re-constrain that merges the identical left components of a nested CompositionTree
+//   - {{.Prefix}}Trans for a re-constrain that swaps the middle elements of a nested CompositionTree.
+//   - {{.Prefix}}TransL for a re-constrain that swaps the right components into the left nested CompositionTree
+func {{.Prefix}}SwapL[I, S, T, A, B any, {{.InConstraints3}}](o Optic[I, S, T, A, B, {{.InOpticSwapL}}]) Optic[I, S, T, A, B, {{.ReconstrainSwapL}}] {
+	return UnsafeReconstrain[{{.ReconstrainSwapL}}](o)
+}
+
+// The {{.Prefix}}Merge re-constrain combines identical left and right side {{.Desc}} types of a composition tree..
+//
+// CompositionTree[{{.TypeParamName}}, {{.TypeParamName}}] --> {{.TypeParamName}}
+//
+// See:
+//   - {{.Prefix}}{{.RestrictedName}} for a re-constrain to {{.RestrictedType}}
+//   - {{.Prefix}}{{.AnyName}} for a re-constrain to {{.AnyType}}
+//   - {{.Prefix}}L for a re-constrain to the left side of a CompositionTree
+//   - {{.Prefix}}R for a re-constrain to the Right side of a CompositionTree
+//   - {{.Prefix}}Swap for a re-constrain that swaps the components of a CompositionTree
+//   - {{.Prefix}}SwapL for a re-constrain that swaps the left components of a nested CompositionTree
+//   - {{.Prefix}}Merge for a re-constrain that merges identical components of a CompositionTree
+//   - {{.Prefix}}MergeL for a re-constrain that merges the identical left components of a nested CompositionTree
+//   - {{.Prefix}}Trans for a re-constrain that swaps the middle elements of a nested CompositionTree.
+//   - {{.Prefix}}TransL for a re-constrain that swaps the right components into the left nested CompositionTree
+func {{.Prefix}}Merge[I, S, T, A, B any, RET any, RW any, DIR any, ERR any](o Optic[I, S, T, A, B, {{.InOpticMerge}}]) Optic[I, S, T, A, B, RET, RW, DIR, ERR] {
+	return UnsafeReconstrain[RET, RW, DIR, ERR](o)
+}
+
+// The {{.Prefix}}MergeL re-constrain combines identical left and right side of the left side of a nested {CompositionTree]
+//
+// CompositionTree[CompositionTree[{{.TypeParamName}}1, {{.TypeParamName}}1], {{.TypeParamName}}2] --> CompositionTree[{{.TypeParamName}}1, {{.TypeParamName}}2]
+//
+// See:
+//   - {{.Prefix}}{{.RestrictedName}} for a re-constrain to {{.RestrictedType}}
+//   - {{.Prefix}}{{.AnyName}} for a re-constrain to {{.AnyType}}
+//   - {{.Prefix}}L for a re-constrain to the left side of a CompositionTree
+//   - {{.Prefix}}R for a re-constrain to the Right side of a CompositionTree
+//   - {{.Prefix}}Swap for a re-constrain that swaps the components of a CompositionTree
+//   - {{.Prefix}}SwapL for a re-constrain that swaps the left components of a nested CompositionTree
+//   - {{.Prefix}}Merge for a re-constrain that merges identical components of a CompositionTree
+//   - {{.Prefix}}MergeL for a re-constrain that merges the identical left components of a nested CompositionTree
+//   - {{.Prefix}}Trans for a re-constrain that swaps the middle elements of a nested CompositionTree.
+//   - {{.Prefix}}TransL for a re-constrain that swaps the right components into the left nested CompositionTree
+func {{.Prefix}}MergeL[I, S, T, A, B any,{{.InConstraintsMerge}}](o Optic[I, S, T, A, B, {{.InOpticMergeL}}]) Optic[I, S, T, A, B, {{.ReconstrainMergeL}}] {
+	return UnsafeReconstrain[{{.ReconstrainMergeL}}](o)
+}
+
+// The {{.Prefix}}Trans re-constrain transposes the middle {{.Desc}} type of a nested [CompositionTree].
+//
+// CompositionTree[CompositionTree[ERR1, ERR2], CompositionTree[ERR3, ERR4] --> CompositionTree[CompositionTree[ERR1, ERR3], CompositionTree[ERR2, ERR4]
+//
+// See:
+//   - {{.Prefix}}{{.RestrictedName}} for a re-constrain to {{.RestrictedType}}
+//   - {{.Prefix}}{{.AnyName}} for a re-constrain to {{.AnyType}}
+//   - {{.Prefix}}L for a re-constrain to the left side of a CompositionTree
+//   - {{.Prefix}}R for a re-constrain to the Right side of a CompositionTree
+//   - {{.Prefix}}Swap for a re-constrain that swaps the components of a CompositionTree
+//   - {{.Prefix}}SwapL for a re-constrain that swaps the left components of a nested CompositionTree
+//   - {{.Prefix}}Merge for a re-constrain that merges identical components of a CompositionTree
+//   - {{.Prefix}}MergeL for a re-constrain that merges the identical left components of a nested CompositionTree
+//   - {{.Prefix}}Trans for a re-constrain that swaps the middle elements of a nested CompositionTree.
+//   - {{.Prefix}}TransL for a re-constrain that swaps the right components into the left nested CompositionTree
+func {{.Prefix}}Trans[I, S, T, A, B any, {{.InConstraintsTrans}}](o Optic[I, S, T, A, B, {{.InOpticTrans}}]) Optic[I, S, T, A, B, {{.ReconstrainTrans}}] {
+	return UnsafeReconstrain[{{.ReconstrainTrans}}](o)
+}
+
+// The EErrTransL re-constrain transposes the right most elements of a nested composition tree with the right of the left most composition tree.
+//
+// CompositionTree[CompositionTree[{{.TypeParamName}}1, {{.TypeParamName}}2], {{.TypeParamName}}3] --> CompositionTree[CompositionTree[{{.TypeParamName}}1, {{.TypeParamName}}3], {{.TypeParamName}}2]
+// This has the effect of removing a level of nested from the {{.TypeParamName}}3 path of the composition tree.
+//
+// See:
+//   - {{.Prefix}}{{.RestrictedName}} for a re-constrain to {{.RestrictedType}}
+//   - {{.Prefix}}{{.AnyName}} for a re-constrain to {{.AnyType}}
+//   - {{.Prefix}}L for a re-constrain to the left side of a CompositionTree
+//   - {{.Prefix}}R for a re-constrain to the Right side of a CompositionTree
+//   - {{.Prefix}}Swap for a re-constrain that swaps the components of a CompositionTree
+//   - {{.Prefix}}SwapL for a re-constrain that swaps the left components of a nested CompositionTree
+//   - {{.Prefix}}Merge for a re-constrain that merges identical components of a CompositionTree
+//   - {{.Prefix}}MergeL for a re-constrain that merges the identical left components of a nested CompositionTree
+//   - {{.Prefix}}Trans for a re-constrain that swaps the middle elements of a nested CompositionTree.
+//   - {{.Prefix}}TransL for a re-constrain that swaps the right components into the left nested CompositionTree
+func {{.Prefix}}TransL[I, S, T, A, B any,{{.InConstraintsTransL}}](o Optic[I, S, T, A, B, {{.InOpticTransL}}]) Optic[I, S, T, A, B, {{.ReconstrainTransL}}] {
+	return UnsafeReconstrain[{{.ReconstrainTransL}}](o)
+}

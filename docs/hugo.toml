@@ -1,0 +1,26 @@
+baseURL = 'https://spearson78.github.io/go-optic/'
+languageCode = 'en-us'
+title = 'go-optics'
+theme='hugo-book'
+ignoreFiles = [ "\\.go$" ]
+
+[params]
+author.name = "Steven Pearson"
+description = "Documentation for go-optics"
+collapsibleMenu = true
+BookLogo = '708-microscope.svg'
+
+[menu]
+[[menu.top]]
+  name = "Credits"
+  url = "/credits"
+  weight = 1
+
+[[menu.top]]
+  name = "GitHub"
+  url = "https://github.com/spearson78/go-optic"
+  weight = 2
+
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'

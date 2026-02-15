@@ -1,0 +1,33 @@
+<script src="/go-optic/wasm_exec.js"></script>
+<script>
+    const go = new Go();
+
+    async function runCompressedGoWasm(url) {
+        console.log("downloading wasm.gz")
+        const response = await fetch(url);
+        console.log("decompressing wasm")
+        const decompressor = new DecompressionStream("gzip");
+        const decompressedStream = response.body.pipeThrough(decompressor);
+        console.log("instantiate streaming wasm")        
+        const wasmModule = await WebAssembly.instantiateStreaming(
+            new Response(
+                decompressedStream,
+                {
+                    //fake header expected by WebAssembly.instantiateStreaming
+                    headers: { "Content-Type": "application/wasm" },
+                }
+            ),
+            go.importObject,
+        );
+        console.log("running go wasm")
+        go.run(wasmModule.instance);
+    }
+
+    runCompressedGoWasm("/go-optic/playground.wasm.gz")
+
+    RunExample = (id) => {
+        code = document.getElementById(id).value
+        res = RunGoCode(JSON.stringify(code),JSON.stringify(1000))
+        document.getElementById(id+"_output").value = JSON.parse(res)
+    }
+</script>

@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <script src="wasm_exec.js"></script>
+        <script>
+            const go = new Go();
+            WebAssembly.instantiateStreaming(fetch("playground.wasm"), go.importObject).then((result) => {
+                go.run(result.instance);
+            });
+
+			RunGo = (code) => {
+                res = RunGoCode(JSON.stringify(code),JSON.stringify(1000))
+                return JSON.parse(res)
+			}
+
+            onButtonClick = () => {
+                code = document.getElementById('gocode').value
+                res = RunGoCode(JSON.stringify(code),JSON.stringify(1000))
+                document.getElementById('output').value = JSON.parse(res)
+            }
+
+        </script>
+    </head>
+    <body>
+        <button onclick="onButtonClick()">RUN</button>
+        <textarea id="gocode" rows="40" cols="120">
+package main
+
+import (
+	"fmt"
+	"strings"
+
+	. "github.com/spearson78/go-optic"
+)
+
+type Person struct {
+	Name    string
+	Age     int
+	Hobbies []string
+}
+
+func main() {
+
+	nameField := FieldLens(func(source *Person) *string { return &source.Name })
+	ageField := FieldLens(func(source *Person) *int { return &source.Age })
+	hobbiesField := FieldLens(func(source *Person) *[]string { return &source.Hobbies })
+
+	data := Person{
+		Name:    "Max Mustermann",
+		Age:     46,
+		//Hobbies: []string{"eating", "sleeping"},
+	}
+
+	name := MustGet(nameField, data)
+	age := MustGet(ageField, data)
+	//hobbies := MustGet(hobbiesField, data)
+
+	fmt.Println(name)
+	fmt.Println(age) //, hobbies)
+
+	fmt.Println(data)
+	olderPerson := MustSet(ageField, 47, data)
+	fmt.Println(olderPerson)
+	fmt.Println(data)
+
+	/*
+	//Note: the return type is a person with hobbies converted to upper case
+	var upperHobbies Person = MustModify(Compose(hobbiesField, TraverseSlice[string]()), Op(strings.ToUpper), data)
+	fmt.Println(upperHobbies)
+	*/
+	//Output:
+	//Max Mustermann 46 [eating sleeping]
+	//{Max Mustermann 47 [eating sleeping]}
+	//{Max Mustermann 46 [EATING SLEEPING]}
+}
+</textarea>
+<textarea id="output"></textarea>
+    </body>
+</html>

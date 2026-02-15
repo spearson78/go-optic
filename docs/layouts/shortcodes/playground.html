@@ -1,0 +1,73 @@
+{{ $toRead := .Get "file" }}
+{{ $id := .Get "id" }}
+{{ $playgroundId := .Get "playgroundid" }}
+{{ $typesId := .Get "typesid" }}
+
+
+{{ $fileContents := readFile $toRead | safeHTML }}
+
+{{ $match := findRE `(?s)import \(.*?\)` $fileContents 1 }}
+{{ $import := index $match 0 }}
+{{ $import = replace $import "\t\"reflect\"\n" "" 1}}
+{{ $import = replace $import "\t\"testing\"\n" "" 1}}
+
+{{ $blockRe := print `(?s)//BEGIN ` $id `\n*(.*?)\n*(\s*)//END ` $id }}
+{{ $match := findRESubmatch $blockRe $fileContents 1 }}
+{{ $block := index $match 0 }}
+{{ $code := index $block 1 }}
+
+{{ $playCode := $code}}
+{{ if not (eq $playgroundId "") }}
+{{ $playBlockRe := print `(?s)//BEGIN ` $playgroundId `\n*(.*?)\n*(\s*)//END ` $playgroundId }}
+{{ $playMatch := findRESubmatch $playBlockRe $fileContents 1 }}
+{{ $playBlock := index $playMatch 0 }}
+{{ $playCode = index $playBlock 1 }}
+{{ $playCode = replaceRE `(?s)\s*//BEGIN[^\n]*` `` $playCode }}
+{{ $playCode = replaceRE `(?s)\s*//END[^\n]*` `` $playCode }}
+{{ end }}
+
+{{ $typesCode := ""}}
+{{ if not (eq $typesId "") }}
+{{ $typesBlockRe := print `(?s)//BEGIN ` $typesId `\n*(.*?)\n*(\s*)//END ` $typesId }}
+{{ $typesMatch := findRESubmatch $typesBlockRe $fileContents 1 }}
+{{ $typesBlock := index $typesMatch 0 }}
+{{ $typesCode = print (index $typesBlock 1) "\n" }}
+{{ end }}
+
+
+<div class="book-tabs">
+    <input type="radio" class="toggle" name="playground_tabs_{{$id}}" id="playground_tab_{{$id}}_code" checked="checked" />
+    <label for="playground_tab_{{$id}}_code">Example </label>
+    <div class="book-tabs-content markdown-inner">
+        {{ highlight $code "go" "lineNos=true"}}
+    </div>
+
+     <input type="radio" class="toggle" name="playground_tabs_{{$id}}" id="playground_tab_{{$id}}_playground" />
+    <label for="playground_tab_{{$id}}_playground">Playground </label>
+    <div class="book-tabs-content markdown-inner">
+        <div>
+            <textarea style="width: 100%;resize: vertical;" rows="20" id="playground_{{$id}}">
+package main
+
+{{$import}}
+{{$typesCode}}
+func main() {
+{{$playCode}}
+}
+            </textarea>
+        </div>
+        <div>
+            <a class="book-btn" onclick="RunExample('playground_{{$id}}')">Run</a>
+        </div>
+        <div >
+            <textarea style="width: 100%;resize: vertical;" rows="2" id="playground_{{$id}}_output">    
+        </textarea>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

@@ -1,0 +1,11 @@
+/makelens
+/makecolops
+/makedblens
+/exp/makedblens
+/cover/coverage.out
+/docs/public
+/vet
+docs/content/.obsidian/app.json
+docs/content/.obsidian/appearance.json
+docs/content/.obsidian/core-plugins.json
+docs/content/.obsidian/workspace.json
