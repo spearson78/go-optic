@@ -77,7 +77,7 @@ thirdComment := blogPost.Comments[1]
 
 For maps a `Key` function is provided to retrieve the element with the given key.
 
-See the [Collections](/docs/14.collections) section for more information on `Collection`s
+See the [Collections](/go-optic/docs/14.collections) section for more information on `Collection`s
 
 The `O____Of` functions are used when the source object has a different root e.g.
 

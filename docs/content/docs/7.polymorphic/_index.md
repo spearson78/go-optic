@@ -8,7 +8,7 @@ This can be seen in this visualisation.
 
 ![Optic](/poly_1.svg)
 
-The types flowing to the right are identical to this flowing to the left. This is the normal case when working with optics created by [makelens](/docs/9.makelens).
+The types flowing to the right are identical to this flowing to the left. This is the normal case when working with optics created by [makelens](/go-optic/docs/9.makelens).
 
 It is however possible to convert datatypes within an optic. For these use cases you will need to create user defined optics to perform the conversion.
 

@@ -11,9 +11,9 @@ Go-optics provides tooling and functions to modify deeply nested immutable data 
 The example above is editable just click on the Playground tab.
 
 Check out the:
-- [Introduction](/docs/1.introduction) for a more detailed introduction to go-optics.
-- [Concepts](/docs/2.concepts) section for an in depth overview of the concepts in go-optics
-- [Using](/docs/3.using) section for an deep dive into how to use go-optics
+- [Introduction](/go-optic/docs/1.introduction) for a more detailed introduction to go-optics.
+- [Concepts](/go-optic/docs/2.concepts) section for an in depth overview of the concepts in go-optics
+- [Using](/go-optic/docs/3.using) section for an deep dive into how to use go-optics
 
 Then explore the rest of the documentation using the links on the left.
 

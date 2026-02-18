@@ -35,7 +35,7 @@ Custom optics are constructed using a method named after the optic type.
 
 {{< playground file="/content/docs/10.custom/examples_test.go" id="getter1" >}}
 
-The `Getter` optic requires 2 parameters the get function and an `OpticExpression`. `OpticExpressions` are covered in another section of the documentation. In these examples we will use the `ExprCustom` helper to create a custom expression.  See [Optic Expressions](/docs/12.expression) for more information.
+The `Getter` optic requires 2 parameters the get function and an `OpticExpression`. `OpticExpressions` are covered in another section of the documentation. In these examples we will use the `ExprCustom` helper to create a custom expression.  See [Optic Expressions](/go-optic/docs/12.expression) for more information.
 
 There are several variants of the `Getter` constructor available.
 
@@ -74,7 +74,7 @@ Lenses are constructed from a pair of `getter` and `setter` functions.
 
 {{< playground file="/content/docs/10.custom/examples_test.go" typesid="lens_types" id="lens_customfieldlens" >}}
 
-Lenses to access the fields of a struct are usually auto-generated using the [makelens](/docs/9.makelens) tool which uses the built in `FieldLens` optic.
+Lenses to access the fields of a struct are usually auto-generated using the [makelens](/go-optic/docs/9.makelens) tool which uses the built in `FieldLens` optic.
 
 ### Isos
 `Isos` return exactly one result and are bidirectional. Writing to an `Iso` is equivalent to the reverse operation. `Isos` are named after isomorphism as the conversion from source to focus and back should be lossless so the two types are isomorphic to one another. They are most often used to convert datatypes.
